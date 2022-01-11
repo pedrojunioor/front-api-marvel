@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 
 function Home() {
 
-    const { comics, comicSelected, handleJoinComic } = useContext(Context);
+    const { virtualPage, handleVirtualPage, comics, limit, handleLimit, comicSelected, handleJoinComic } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -51,10 +51,18 @@ function Home() {
 
     return (
         <div className="Home">
-            <div className="Layout">
-            {comics && showComics()}
+            <div style={{display: 'flex',  justifyContent: 'center'}}>
+                <label>Item por pagina: </label>
+                <input type="number" onChange={e => handleLimit(+e.target.value)} value={limit} />
+                <label>Pagina Atual: </label>
+                <input type="number" onChange={e => handleVirtualPage(+e.target.value)} value={virtualPage } />
             </div>
-        
+            
+            <div className="Layout">
+                {comics && showComics()}
+            </div>
+
+
             <Modal
                 isOpen={isOpen}
                 // onAfterOpen={afterOpenModal}
@@ -63,7 +71,7 @@ function Home() {
                 contentLabel="Example Modal"
             >
                 <Card>
-                    {comicSelected &&  <h1>{comicSelected.data.results[0].title}</h1>}
+                    {comicSelected && <h1>{comicSelected.data.results[0].title}</h1>}
                 </Card>
             </Modal>
 
