@@ -37,6 +37,14 @@ function ComicsProvider({ children }) {
     function handleLimit(delta){
         setLimit(delta)
     }
+    function handleLimitUp(){
+        setLimit(limit + 1)
+    }
+    function handleLimitDown(){
+        setLimit(limit -1 )
+    }
+
+
     function handleVirtualPage(delta){
         setVirtualPage(delta)
     }
@@ -53,7 +61,19 @@ function ComicsProvider({ children }) {
     }
 
     return (
-        <Context.Provider value={{ comics, comicSelected, handleJoinComic, getComicsPaged, limit, handleLimit, setLimit, virtualPage, handleVirtualPage}}>
+        <Context.Provider value={{ 
+                comics, 
+                comicSelected, 
+                limit, 
+                virtualPage,
+                handleJoinComic, 
+                getComicsPaged,     
+                handleLimit, 
+                setLimit, 
+                handleVirtualPage,
+                handleLimitUp,
+                handleLimitDown
+                }}>
             {children}
         </Context.Provider>
     );

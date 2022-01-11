@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import './Home.css'
+import './Home.scss'
 import { Context } from '../context/ComicsContext';
 import Card from '../components/Card/Card'
 import Modal from 'react-modal';
@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 
 function Home() {
 
-    const { virtualPage, handleVirtualPage, comics, limit, handleLimit, comicSelected, handleJoinComic } = useContext(Context);
+    const { virtualPage, handleVirtualPage, comics, limit, handleLimitUp, handleLimitDown, comicSelected, handleJoinComic } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -42,26 +42,30 @@ function Home() {
 
     function showComics() {
         return Object.entries(comics.data.results).map((item, i) => {
-            return <Card key={i} titulo={item[1].title}>
-                <span>{item[1].id}</span>
-                <button onClick={e => handleJoinComic(e, item[1].id)}>Detalhes</button>
-            </Card>
+            return <div key={i} className="comic">
+                <Card >
+                    <img src={`${item[1].thumbnail.path}.${item[1].thumbnail.extension}`} alt="AAA" />
+                </Card>
+                <div className="button-details">
+                    <button onClick={e => handleJoinComic(e, item[1].id)}>{item[1].title}</button>
+                </div>
+            </div>
         })
     }
 
     return (
         <div className="Home">
-            <div style={{display: 'flex',  justifyContent: 'center'}}>
-                <label>Item por pagina: </label>
-                <input type="number" onChange={e => handleLimit(+e.target.value)} value={limit} />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <label>Item por pagina: {limit + 1} </label>
+                <button onClick={e => handleLimitUp()}>UP</button>
+                <button onClick={e => handleLimitDown()}>DOWN </button>
                 <label>Pagina Atual: </label>
-                <input type="number" onChange={e => handleVirtualPage(+e.target.value)} value={virtualPage } />
-            </div>
-            
-            <div className="Layout">
-                {comics && showComics()}
+                <input type="number" onChange={e => handleVirtualPage(+e.target.value)} value={virtualPage} />
             </div>
 
+            <div className="layout">
+                {comics && showComics()}
+            </div>
 
             <Modal
                 isOpen={isOpen}
@@ -72,6 +76,7 @@ function Home() {
             >
                 <Card>
                     {comicSelected && <h1>{comicSelected.data.results[0].title}</h1>}
+                    {comicSelected && console.log(comicSelected.data.results[0])}
                 </Card>
             </Modal>
 
