@@ -1,4 +1,4 @@
-import React, { createContext, useState,useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import api from '../config/api'
 
 const Context = createContext();
@@ -6,47 +6,57 @@ const Context = createContext();
 function ComicsProvider({ children }) {
 
     const [comics, setComics] = useState(undefined)
-    const [comicSelected,setComicSelected] = useState(undefined)
-    const [limit, setLimit] = useState(10)
-    const [virtualPage,setVirtualPage] = useState(((0-1) * limit) <= 0 ? 0 : ((0-1) * limit))
-    
+    const [comicSelected, setComicSelected] = useState(undefined)
+    const [limit, setLimit] = useState(8)
+    const [virtualPage, setVirtualPage] = useState(((0 - 1) * limit) <= 0 ? 0 : ((0 - 1) * limit))
+
 
     let API_TS = process.env.REACT_APP_API_TS
     let API_KEY = process.env.REACT_APP_API_KEY
     let API_HASH = process.env.REACT_APP_API_HASH
 
-    useEffect(() =>{
-        if(comics === undefined){
+    useEffect(() => {
+        if (comics === undefined) {
             getComicsPaged(0)
         }
-        
-    },[comics])
 
-    useEffect(() =>{
+    }, [comics])
+
+    useEffect(() => {
         getComicsPaged()
-    },[limit,virtualPage])
+    }, [limit, virtualPage])
 
-    function getComicsPaged(){
-        api.get(`comics?limit=${limit}&offset=${virtualPage}&ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result =>{
+    function getComicsPaged() {
+        api.get(`comics?limit=${limit}&offset=${virtualPage}&ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
             setComics(result.data)
-        }).catch(error =>{
+        }).catch(error => {
             console.log(error)
         })
     }
 
-    function handleLimit(delta){
+    function handleLimit(delta) {
         setLimit(delta)
     }
-    function handleLimitUp(){
+    function handleLimitUp() {
         setLimit(limit + 1)
     }
-    function handleLimitDown(){
-        setLimit(limit -1 )
+    function handleLimitDown() {
+        setLimit(limit - 1)
     }
 
-
-    function handleVirtualPage(delta){
+    function handleVirtualPage(delta) {
         setVirtualPage(delta)
+    }
+
+    function handleVirtualPageNext() {
+        // if(virtualPage < ){
+            setVirtualPage(virtualPage + 1)
+        // }
+    }
+    function handleVirtualPagePreview() {
+        if (virtualPage > 0) {
+            setVirtualPage(virtualPage - 1)
+        }
     }
 
     function handleJoinComic(event, idComic) {
@@ -61,19 +71,21 @@ function ComicsProvider({ children }) {
     }
 
     return (
-        <Context.Provider value={{ 
-                comics, 
-                comicSelected, 
-                limit, 
-                virtualPage,
-                handleJoinComic, 
-                getComicsPaged,     
-                handleLimit, 
-                setLimit, 
-                handleVirtualPage,
-                handleLimitUp,
-                handleLimitDown
-                }}>
+        <Context.Provider value={{
+            comics,
+            comicSelected,
+            limit,
+            virtualPage,
+            handleJoinComic,
+            getComicsPaged,
+            handleLimit,
+            setLimit,
+            handleVirtualPage,
+            handleLimitUp,
+            handleLimitDown,
+            handleVirtualPagePreview,
+            handleVirtualPageNext
+        }}>
             {children}
         </Context.Provider>
     );

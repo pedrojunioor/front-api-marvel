@@ -1,13 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './Home.scss'
-import { Context } from '../context/ComicsContext';
-import Card from '../components/Card/Card'
+import { Context } from '../../context/ComicsContext';
+import Card from '../../components/Card/Card'
 import Modal from 'react-modal';
-
+import PageDetails from '../PageDetails/PageDetails'
 
 function Home() {
 
-    const { virtualPage, handleVirtualPage, comics, limit, handleLimitUp, handleLimitDown, comicSelected, handleJoinComic } = useContext(Context);
+    const { virtualPage,
+        handleVirtualPage,
+        comics,
+        limit,
+        handleLimit,
+        handleLimitUp,
+        handleLimitDown,
+        comicSelected,
+        handleJoinComic,
+        handleVirtualPagePreview,
+        handleVirtualPageNext } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -55,17 +65,31 @@ function Home() {
 
     return (
         <div className="Home">
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <label>Item por pagina: {limit + 1} </label>
-                <button onClick={e => handleLimitUp()}>UP</button>
-                <button onClick={e => handleLimitDown()}>DOWN </button>
-                <label>Pagina Atual: </label>
-                <input type="number" onChange={e => handleVirtualPage(+e.target.value)} value={virtualPage} />
-            </div>
+
 
             <div className="layout">
                 {comics && showComics()}
             </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                    {virtualPage > 0 && <button onClick={handleVirtualPagePreview}> ANTERIOR </button>}
+                    <label> Pagina Atual: {virtualPage + 1} </label>
+                    <button onClick={handleVirtualPageNext}> PROXIMO </button>
+                </div>
+                <div className="input-select">
+                    <label>Item por pagina</label>
+                    <select value={limit} onChange={e => handleLimit(+e.target.value)}>
+                        <option value={4}>4</option>
+                        <option value={8}>8</option>
+                        <option value={12}>12</option>
+                        <option value={16}>16</option>
+                    </select>
+                </div>
+
+            </div>
+
+
 
             <Modal
                 isOpen={isOpen}
@@ -74,10 +98,8 @@ function Home() {
                 style={customStyles}
                 contentLabel="Example Modal"
             >
-                <Card>
-                    {comicSelected && <h1>{comicSelected.data.results[0].title}</h1>}
-                    {comicSelected && console.log(comicSelected.data.results[0])}
-                </Card>
+                <PageDetails />
+
             </Modal>
 
         </div>
