@@ -7,9 +7,9 @@ function ComicsProvider({ children }) {
 
     const [comics, setComics] = useState(undefined)
     const [comicSelected, setComicSelected] = useState(undefined)
+    const [comicInCart, setComicInCart] = useState([])
     const [limit, setLimit] = useState(8)
     const [virtualPage, setVirtualPage] = useState(((0 - 1) * limit) <= 0 ? 0 : ((0 - 1) * limit))
-
 
     let API_TS = process.env.REACT_APP_API_TS
     let API_KEY = process.env.REACT_APP_API_KEY
@@ -19,12 +19,15 @@ function ComicsProvider({ children }) {
         if (comics === undefined) {
             getComicsPaged(0)
         }
-
     }, [comics])
 
     useEffect(() => {
         getComicsPaged()
     }, [limit, virtualPage])
+
+    useEffect(() => {
+        console.log('CARRINHO', comicInCart)
+    }, [comicInCart])
 
     function getComicsPaged() {
         api.get(`comics?limit=${limit}&offset=${virtualPage}&ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
@@ -43,14 +46,12 @@ function ComicsProvider({ children }) {
     function handleLimitDown() {
         setLimit(limit - 1)
     }
-
     function handleVirtualPage(delta) {
         setVirtualPage(delta)
     }
-
     function handleVirtualPageNext() {
         // if(virtualPage < ){
-            setVirtualPage(virtualPage + 1)
+        setVirtualPage(virtualPage + 1)
         // }
     }
     function handleVirtualPagePreview() {
@@ -58,10 +59,8 @@ function ComicsProvider({ children }) {
             setVirtualPage(virtualPage - 1)
         }
     }
-
     function handleJoinComic(event, idComic) {
         event.preventDefault();
-
         api.get(`comics/${idComic}?ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
             setComicSelected(result.data)
         }).catch(error => {
@@ -70,10 +69,25 @@ function ComicsProvider({ children }) {
 
     }
 
+    function handleAddCart(comic) {
+        let carrinho = comicInCart
+        const add = carrinho.some((item) => item.id === comic.id)
+        if (add === false) {
+            carrinho.push(comic)
+        }
+        setComicInCart(carrinho)
+    }
+
+    function handleRemoveCart(comic) {
+        let carrinho = comicInCart.filter((item) => item.id !== comic.id);
+        setComicInCart(carrinho)
+    }
+
     return (
         <Context.Provider value={{
             comics,
             comicSelected,
+            comicInCart,
             limit,
             virtualPage,
             handleJoinComic,
@@ -84,7 +98,10 @@ function ComicsProvider({ children }) {
             handleLimitUp,
             handleLimitDown,
             handleVirtualPagePreview,
-            handleVirtualPageNext
+            handleVirtualPageNext,
+            handleAddCart,
+            handleRemoveCart
+
         }}>
             {children}
         </Context.Provider>

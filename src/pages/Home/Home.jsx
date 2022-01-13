@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './Home.scss'
 import { Context } from '../../context/ComicsContext';
+
+
 import Card from '../../components/Card/Card'
 import Modal from 'react-modal';
 import PageDetails from '../PageDetails/PageDetails'
@@ -8,16 +10,14 @@ import PageDetails from '../PageDetails/PageDetails'
 function Home() {
 
     const { virtualPage,
-        handleVirtualPage,
         comics,
         limit,
         handleLimit,
-        handleLimitUp,
-        handleLimitDown,
         comicSelected,
         handleJoinComic,
         handleVirtualPagePreview,
-        handleVirtualPageNext } = useContext(Context);
+        handleVirtualPageNext,
+        handleAddCart } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -58,6 +58,9 @@ function Home() {
                 </Card>
                 <div className="button-details">
                     <button onClick={e => handleJoinComic(e, item[1].id)}>{item[1].title}</button>
+                </div>
+                <div className="button-details">
+                    <button onClick={e => handleAddCart(item[1])}>ADD DO CART</button>
                 </div>
             </div>
         })
