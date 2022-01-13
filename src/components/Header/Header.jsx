@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.scss';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     return (
@@ -13,15 +13,9 @@ const Header = () => {
             </div>
             <div className="user-area">
                 <div>
-                    USER
-                </div>
-                <div>
                     <Link to="/Cart">CART</Link>
                 </div>
-
             </div>
-
-
         </div>
 
     )

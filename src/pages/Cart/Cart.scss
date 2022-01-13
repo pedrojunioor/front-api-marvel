@@ -1,0 +1,29 @@
+.cart{
+    display: flex;
+    background: #fff;
+    border-radius: 8px;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px 10px 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-radius: 1px solid;
+}
+.to-approve{
+    display: flex;
+    gap: 10px;
+}
+
+.button-delete{
+    height: 30px;
+    margin:auto ;
+    border-radius: 8px;
+    font-weight: 500;
+    background: red;
+    color: #FFF;
+    padding: 0 16px;
+    cursor: pointer;
+    border: 0;
+}

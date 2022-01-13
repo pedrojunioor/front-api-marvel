@@ -17,9 +17,11 @@ function Home() {
         handleJoinComic,
         handleVirtualPagePreview,
         handleVirtualPageNext,
+        resetComicSelected,
         handleAddCart } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
+    let subtitle;
 
     const customStyles = {
         content: {
@@ -37,7 +39,13 @@ function Home() {
     }
 
     function closeModal() {
+        resetComicSelected()
         setIsOpen(false);
+
+    }
+
+    function afterOpenModal() {
+        subtitle.style.color = '#f00';
     }
 
     useEffect(() => {
@@ -76,9 +84,9 @@ function Home() {
 
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-                    {virtualPage > 0 && <button onClick={handleVirtualPagePreview}> ANTERIOR </button>}
+                    {virtualPage > 0 && <button onClick={handleVirtualPagePreview}> &lt;  </button>}
                     <label> Pagina Atual: {virtualPage + 1} </label>
-                    <button onClick={handleVirtualPageNext}> PROXIMO </button>
+                    <button onClick={handleVirtualPageNext}> &gt;  </button>
                 </div>
                 <div className="input-select">
                     <label>Item por pagina</label>
@@ -96,11 +104,12 @@ function Home() {
 
             <Modal
                 isOpen={isOpen}
-                // onAfterOpen={afterOpenModal}
+                onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}
                 contentLabel="Example Modal"
             >
+                <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
                 <PageDetails />
 
             </Modal>

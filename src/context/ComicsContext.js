@@ -59,6 +59,10 @@ function ComicsProvider({ children }) {
             setVirtualPage(virtualPage - 1)
         }
     }
+
+    function resetComicSelected(){
+        setComicSelected(undefined)
+    }
     function handleJoinComic(event, idComic) {
         event.preventDefault();
         api.get(`comics/${idComic}?ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
@@ -70,17 +74,25 @@ function ComicsProvider({ children }) {
     }
 
     function handleAddCart(comic) {
-        let carrinho = comicInCart
-        const add = carrinho.some((item) => item.id === comic.id)
-        if (add === false) {
-            carrinho.push(comic)
+        if (comic !== undefined) {
+            console.log('add',comic.id)
+            let carrinho = comicInCart
+            const add = carrinho.some((item) => item.id === comic.id)
+            if (add === false) {
+                carrinho.push(comic)
+                alert('comic adicionada ao carrinho')
+            }
+            else {
+                alert('Nao foi possivel adicionar')
+            }
+            setComicInCart(carrinho)
         }
-        setComicInCart(carrinho)
     }
 
     function handleRemoveCart(comic) {
         let carrinho = comicInCart.filter((item) => item.id !== comic.id);
         setComicInCart(carrinho)
+        alert('removida com sucesso')
     }
 
     return (
@@ -100,7 +112,8 @@ function ComicsProvider({ children }) {
             handleVirtualPagePreview,
             handleVirtualPageNext,
             handleAddCart,
-            handleRemoveCart
+            handleRemoveCart,
+            resetComicSelected
 
         }}>
             {children}
