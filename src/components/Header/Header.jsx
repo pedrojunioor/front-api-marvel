@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './Header.scss';
 import { Link } from 'react-router-dom';
+import { Context } from '../../context/ComicsContext';
+
 
 const Header = () => {
+
+    const { search, handleSearch, getComicsPagedwithFilter } = useContext(Context);
+    
+    
+
     return (
         <div className="header">
             <div className="logo">
@@ -11,12 +18,20 @@ const Header = () => {
                 </Link>
             </div>
             <div className="input-busca">
-                <input type="text" className="text" />
+                <input
+                    type="text"
+                    className="text"
+                    value={search}
+                    placeholder="Busque por titulo"
+                    onChange={e => handleSearch(e.target.value)} />
+                <button
+                    onClick={getComicsPagedwithFilter}
+                >Buscar</button>
             </div>
             <div className="user-area">
                 <div>
                     <Link to="/Cart">
-                        <img src="https://cdn-icons.flaticon.com/png/512/3091/premium/3091221.png?token=exp=1642804555~hmac=cd9f86cb9b877c102143d04678c6d281" alt="" />
+                        <img src='../../assets/' alt="" />
                     </Link>
                 </div>
             </div>

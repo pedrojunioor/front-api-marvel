@@ -8,10 +8,15 @@
     }
 
     .input-busca{
+        display: flex; 
         width:40%;
+        gap: 10px;
         > input{
             height: 40px;
             width:100%
+        }
+        >button{
+            height: 40px;
         }
     }
 

@@ -19,7 +19,8 @@ function Home() {
         handleVirtualPagePreview,
         handleVirtualPageNext,
         resetComicSelected,
-        handleAddCart } = useContext(Context);
+        handleAddCart,
+        qtdPages } = useContext(Context);
 
     const [isOpen, setIsOpen] = useState(false);
     let subtitle;
@@ -84,8 +85,8 @@ function Home() {
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
                     {virtualPage > 0 && <button onClick={handleVirtualPagePreview}> &lt;  </button>}
-                    <h3> Pagina Atual: {virtualPage + 1} </h3>
-                    <button onClick={handleVirtualPageNext}> &gt;  </button>
+                                        <h3> Pagina Atual: {virtualPage + 1} </h3>
+                     {virtualPage < qtdPages && <button onClick={handleVirtualPageNext}> &gt;  </button>}                     
                 </div>
                 <div className="input-select">
                     <h3>Item por pagina</h3>

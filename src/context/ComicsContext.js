@@ -6,10 +6,12 @@ const Context = createContext();
 function ComicsProvider({ children }) {
 
     const [comics, setComics] = useState(undefined)
+    const [search, setSearch] = useState('')
     const [comicSelected, setComicSelected] = useState(undefined)
     const [comicInCart, setComicInCart] = useState([])
     const [limit, setLimit] = useState(8)
     const [virtualPage, setVirtualPage] = useState(((0 - 1) * limit) <= 0 ? 0 : ((0 - 1) * limit))
+    const [qtdPages,setQtdPages] = useState(undefined)
 
     let API_TS = process.env.REACT_APP_API_TS
     let API_KEY = process.env.REACT_APP_API_KEY
@@ -22,12 +24,17 @@ function ComicsProvider({ children }) {
     }, [comics])
 
     useEffect(() => {
-        getComicsPaged()
+        getComicsPagedwithFilter()
     }, [limit, virtualPage])
 
     useEffect(() => {
-        console.log('CARRINHO', comicInCart)
-    }, [comicInCart])
+        if(comics !== undefined) {
+            setQtdPages(Math.floor(comics.data.total/comics.data.limit))
+            console.log(Math.floor(comics.data.total/comics.data.limit))
+        }
+    },[comics])
+
+
 
     function getComicsPaged() {
         api.get(`comics?limit=${limit}&offset=${virtualPage}&ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
@@ -37,9 +44,26 @@ function ComicsProvider({ children }) {
         })
     }
 
+    function getComicsPagedwithFilter() {
+        if (search !== '') {
+            api.get(`comics?titleStartsWith=${search}&limit=${limit}&offset=${virtualPage}&ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
+                setComics(result.data)
+            }).catch(error => {
+                console.log(error)
+            })
+        }else{
+            getComicsPaged()
+        }
+    }
+
+    function handleSearch(delta) {
+        setSearch(delta)
+    }
     function handleLimit(delta) {
         setLimit(delta)
     }
+
+
     function handleLimitUp() {
         setLimit(limit + 1)
     }
@@ -50,9 +74,9 @@ function ComicsProvider({ children }) {
         setVirtualPage(delta)
     }
     function handleVirtualPageNext() {
-        // if(virtualPage < ){
+        if(virtualPage < qtdPages){
         setVirtualPage(virtualPage + 1)
-        // }
+        }
     }
     function handleVirtualPagePreview() {
         if (virtualPage > 0) {
@@ -60,9 +84,10 @@ function ComicsProvider({ children }) {
         }
     }
 
-    function resetComicSelected(){
+    function resetComicSelected() {
         setComicSelected(undefined)
     }
+
     function handleJoinComic(event, idComic) {
         event.preventDefault();
         api.get(`comics/${idComic}?ts=${API_TS}&apikey=${API_KEY}&hash=${API_HASH}`).then(result => {
@@ -75,7 +100,7 @@ function ComicsProvider({ children }) {
 
     function handleAddCart(comic) {
         if (comic !== undefined) {
-            console.log('add',comic.id)
+            console.log('add', comic.id)
             let carrinho = comicInCart
             const add = carrinho.some((item) => item.id === comic.id)
             if (add === false) {
@@ -95,6 +120,8 @@ function ComicsProvider({ children }) {
         alert('removida com sucesso')
     }
 
+
+
     return (
         <Context.Provider value={{
             comics,
@@ -102,6 +129,8 @@ function ComicsProvider({ children }) {
             comicInCart,
             limit,
             virtualPage,
+            search,
+            handleSearch,
             handleJoinComic,
             getComicsPaged,
             handleLimit,
@@ -113,7 +142,9 @@ function ComicsProvider({ children }) {
             handleVirtualPageNext,
             handleAddCart,
             handleRemoveCart,
-            resetComicSelected
+            resetComicSelected,
+            getComicsPagedwithFilter,
+            qtdPages
 
         }}>
             {children}
