@@ -12,6 +12,7 @@ function ComicsProvider({ children }) {
     const [limit, setLimit] = useState(8)
     const [virtualPage, setVirtualPage] = useState(((0 - 1) * limit) <= 0 ? 0 : ((0 - 1) * limit))
     const [qtdPages,setQtdPages] = useState(undefined)
+    const [endereco,setEndereco] = useState('')
 
     let API_TS = process.env.REACT_APP_API_TS
     let API_KEY = process.env.REACT_APP_API_KEY
@@ -58,6 +59,9 @@ function ComicsProvider({ children }) {
 
     function handleSearch(delta) {
         setSearch(delta)
+    }
+    function handleEndereco(delta) {
+        setEndereco(delta)
     }
     function handleLimit(delta) {
         setLimit(delta)
@@ -115,9 +119,15 @@ function ComicsProvider({ children }) {
     }
 
     function handleRemoveCart(comic) {
-        let carrinho = comicInCart.filter((item) => item.id !== comic.id);
-        setComicInCart(carrinho)
-        alert('removida com sucesso')
+        if(window.confirm('Deseja mesmo excluir esta comic do carrinho?')){
+            let carrinho = comicInCart.filter((item) => item.id !== comic.id);
+            setComicInCart(carrinho)
+            alert('removida com sucesso')
+        }
+    }
+
+    function resetComicInCart(){
+        setComicInCart([])
     }
 
 
@@ -130,6 +140,8 @@ function ComicsProvider({ children }) {
             limit,
             virtualPage,
             search,
+            endereco,
+            handleEndereco,
             handleSearch,
             handleJoinComic,
             getComicsPaged,
@@ -144,7 +156,8 @@ function ComicsProvider({ children }) {
             handleRemoveCart,
             resetComicSelected,
             getComicsPagedwithFilter,
-            qtdPages
+            qtdPages,
+            resetComicInCart
 
         }}>
             {children}

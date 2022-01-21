@@ -31,7 +31,7 @@ const Header = () => {
             <div className="user-area">
                 <div>
                     <Link to="/Cart">
-                        <img src='../../assets/' alt="" />
+                       CARRINHO
                     </Link>
                 </div>
             </div>

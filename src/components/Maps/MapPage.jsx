@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState } from "react";
+
+import { Context } from '../../context/ComicsContext';
+
+
 import "./MapPage.scss";
 import {
     GoogleMap,
@@ -9,10 +13,12 @@ import {
 
 const MapPage = () => {
 
+    const { endereco, handleEndereco } = useContext(Context);
+
     const [map, setMap] = useState();
     const [searchBoxA, setSearchBoxA] = useState();
     const [pointA, setPointA] = useState();
-    const [endereco, setEndereco] = useState('')
+    // const [endereco, setEndereco] = useState('')
     const [response, setResponse] = useState(null);
 
     useEffect(() => {
@@ -44,7 +50,7 @@ const MapPage = () => {
         console.log('PLACES',places)
         if (places) {
             place = places[0]
-            setEndereco(place.formatted_address)
+            handleEndereco(place.formatted_address)
         }
 
         const location = {
