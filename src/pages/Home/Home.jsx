@@ -6,6 +6,7 @@ import { Context } from '../../context/ComicsContext';
 import Card from '../../components/Card/Card'
 import Modal from 'react-modal';
 import PageDetails from '../PageDetails/PageDetails'
+import Button from '../../components/Button/Button'
 
 function Home() {
 
@@ -65,10 +66,10 @@ function Home() {
                     <img src={`${item[1].thumbnail.path}.${item[1].thumbnail.extension}`} alt="AAA" />
                 </Card>
                 <div className="button-details">
-                    <button onClick={e => handleJoinComic(e, item[1].id)}>{item[1].title}</button>
+                    <Button onClick={e => handleJoinComic(e, item[1].id)}>{item[1].title}</Button>
                 </div>
                 <div className="button-details">
-                    <button onClick={e => handleAddCart(item[1])}>ADD DO CART</button>
+                    <Button onClick={e => handleAddCart(item[1])}>ADD DO CART</Button>
                 </div>
             </div>
         })
@@ -76,8 +77,6 @@ function Home() {
 
     return (
         <div className="Home">
-
-
             <div className="layout">
                 {comics && showComics()}
             </div>
@@ -85,11 +84,11 @@ function Home() {
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
                     {virtualPage > 0 && <button onClick={handleVirtualPagePreview}> &lt;  </button>}
-                    <label> Pagina Atual: {virtualPage + 1} </label>
+                    <h3> Pagina Atual: {virtualPage + 1} </h3>
                     <button onClick={handleVirtualPageNext}> &gt;  </button>
                 </div>
                 <div className="input-select">
-                    <label>Item por pagina</label>
+                    <h3>Item por pagina</h3>
                     <select value={limit} onChange={e => handleLimit(+e.target.value)}>
                         <option value={4}>4</option>
                         <option value={8}>8</option>
@@ -109,8 +108,9 @@ function Home() {
                 style={customStyles}
                 contentLabel="Example Modal"
             >
-                <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-                <PageDetails />
+                <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
+                {comicSelected && 
+                <PageDetails />}
 
             </Modal>
 

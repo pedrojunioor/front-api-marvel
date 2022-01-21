@@ -3,7 +3,7 @@ import './TopHeader.scss';
 
 const TopHeader = () =>{
     return(
-        <h1>BARRA SUPERIOR</h1>
+        <h1>FRONT API MARVEL</h1>
     )
 }
 
